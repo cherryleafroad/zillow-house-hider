@@ -47,8 +47,8 @@ function app() {
       clearButton.appendChild(document.createTextNode("Clear Hidden Results"));
       clearButton.onclick = () => { chrome.storage.sync.clear(); updateHiddenCount(); }
       header.appendChild(clearButton);
+      updateHiddenCount();
   }
-  updateHiddenCount();
 }
 
 /*
