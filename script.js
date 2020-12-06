@@ -10,12 +10,14 @@ window.setInterval(function() {
 }, 2000);
 
 function app() {
-  const thumbnails = [
-    ...document.getElementsByClassName("zsg-photo-card-actions")
-  ];
+  const thumbnails = document.querySelectorAll("ul.photo-cards > li");
 
   thumbnails.forEach(thumbnail => {
-    const houseId = thumbnail.firstChild.dataset.fmZpid;
+    // it's an ad, skip it
+    if (thumbnail.lastChild.id === "nav-ad-container")
+        return;
+
+    const houseId = thumbnail.lastChild.id;
 
     // remove all hidden houses from DOM
     storageGet(houseIdObj => {
@@ -26,10 +28,25 @@ function app() {
     });
 
     // add hidden button to visible houses
-    if (thumbnail.children.length === 1) {
-      thumbnail.appendChild(createHideButton(houseId, thumbnail));
+    if (thumbnail.id != "hideButton") {
+      thumbnail.setAttribute("id", "hideButton");
+      // add spacing on favorite button
+      // this is the SPAN of the heart
+      thumbnail.lastChild.lastChild.firstChild.setAttribute("style", "margin-right: 44px;");
+      // add hide button
+      thumbnail.lastChild.appendChild(createHideButton(houseId, thumbnail));
     }
   });
+  
+  // add a clear hidden results link
+  var header = document.getElementsByClassName("search-page-list-header")[0];
+  if (header.id != "clearButton") {
+      header.setAttribute("id", "clearButton");
+      const clearButton = document.createElement("a");
+      clearButton.appendChild(document.createTextNode("Clear Hidden Results"));
+      clearButton.onclick = () => { chrome.storage.sync.clear(); }
+      header.appendChild(clearButton);
+  }
 }
 
 /*
@@ -37,18 +54,27 @@ function app() {
   remove the entire thumbnail for that given house
 */
 function removeHouseFromDOM(thumbnailDOM) {
-  const houseListItem = thumbnailDOM.parentNode.parentNode.parentNode;
-  const houseList = houseListItem.parentNode;
-  houseList.removeChild(houseListItem);
+  const houseList = thumbnailDOM.parentNode;
+  houseList.removeChild(thumbnailDOM);
 }
 
 /*
   Create a hide house button
 */
 function createHideButton(houseId, thumbnailDOM) {
-  const hideButton = document.createElement("a");
-  hideButton.appendChild(document.createTextNode("❌"));
-  hideButton.onclick = onClick(houseId, thumbnailDOM);
+  hideButton = document.createElement("button");
+  hideButton.setAttribute("class", "list-card-save");
+  hideButton.setAttribute("type", "button");
+  
+  span = document.createElement("span");
+  span.setAttribute("class", "list-card-save-content");
+  span.setAttribute("style", "padding-top:12px;");
+  hideButton.appendChild(span);
+  
+  link = document.createElement("a");
+  link.appendChild(document.createTextNode("❌"));
+  link.onclick = onClick(houseId, thumbnailDOM);
+  span.appendChild(link);
   return hideButton;
 }
 
