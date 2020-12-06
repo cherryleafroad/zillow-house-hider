@@ -42,11 +42,13 @@ function app() {
   var header = document.getElementsByClassName("search-page-list-header")[0];
   if (header.id != "clearButton") {
       header.setAttribute("id", "clearButton");
-      const clearButton = document.createElement("a");
+      clearButton = document.createElement("a");
+      clearButton.setAttribute("id", "clearButtonA");
       clearButton.appendChild(document.createTextNode("Clear Hidden Results"));
-      clearButton.onclick = () => { chrome.storage.sync.clear(); }
+      clearButton.onclick = () => { chrome.storage.sync.clear(); updateHiddenCount(); }
       header.appendChild(clearButton);
   }
+  updateHiddenCount();
 }
 
 /*
@@ -56,6 +58,18 @@ function app() {
 function removeHouseFromDOM(thumbnailDOM) {
   const houseList = thumbnailDOM.parentNode;
   houseList.removeChild(thumbnailDOM);
+}
+
+function updateHiddenCount(increase = false) {
+    storageGet(result => {
+        count = Object.keys(result).length;
+
+        if (increase)
+            count++;
+
+        elem = document.getElementsByClassName("search-page-list-header")[0].children.clearButtonA;
+        elem.textContent = "Clear Hidden Results (" + count + ")";
+    });
 }
 
 /*
@@ -82,6 +96,7 @@ function onClick(houseId, thumbnailDOM) {
   return function(e) {
     storageSet(houseId, true);
     removeHouseFromDOM(thumbnailDOM);
+    updateHiddenCount(true);
   };
 }
 
@@ -91,8 +106,10 @@ function onClick(houseId, thumbnailDOM) {
 function storageGet(callback) {
   chrome.storage.sync.get(["zillowHouseHide"], result => {
     // key not yet set
-    if (Object.keys(result).length === 0)
+    if (Object.keys(result).length === 0) {
+        callback({});
         return;
+    }
 
     console.log(result);
     callback(result.zillowHouseHide);
