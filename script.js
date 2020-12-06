@@ -90,6 +90,10 @@ function onClick(houseId, thumbnailDOM) {
 */
 function storageGet(callback) {
   chrome.storage.sync.get(["zillowHouseHide"], result => {
+    // key not yet set
+    if (Object.keys(result).length === 0)
+        return;
+
     console.log(result);
     callback(result.zillowHouseHide);
   });
@@ -100,7 +104,6 @@ function storageGet(callback) {
 */
 function storageSet(key, value) {
   chrome.storage.sync.get(["zillowHouseHide"], result => {
-    console.log("test:", result.zillowHouseHide);
     chrome.storage.sync.set({
       zillowHouseHide: {
         ...result.zillowHouseHide,
