@@ -60,7 +60,7 @@ function app() {
       thumbnail.lastChild.appendChild(createHideButton(houseId, thumbnail));
     }
     
-    thumbnail.lastChild.onclick = () => {  onClickHouse(thouseId, thumbnail); }
+    thumbnail.lastChild.onclick = () => {  onClickHouse(houseId, thumbnail); }
   });
   
   // add a clear hidden results link
