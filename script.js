@@ -1,5 +1,5 @@
 // checks if there's a map on the page. if so, we're looking for houses
-let t = document.querySelectorAll("div#search-page-map-container");
+let t = document.querySelector("div#search-page-map-container");
 
 if (t !== null) {
     // initial load
