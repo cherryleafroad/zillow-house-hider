@@ -60,7 +60,7 @@ function app() {
       thumbnail.lastChild.appendChild(createHideButton(houseId, thumbnail));
     }
     
-    thumbnail.lastChild.onclick = () => {  onclickHouse(thumbnail); }
+    thumbnail.lastChild.onclick = () => {  onClickHouse(thouseId, thumbnail); }
   });
   
   // add a clear hidden results link
@@ -94,7 +94,7 @@ function unhideHouses() {
   });
 }
 
-function onclickHouse(thumbnail) {
+function onClickHouse(houseId, thumbnail) {
     var target = document.querySelector("div#home-detail-lightbox-container");
 
     // do processing after the list finishes loading
@@ -106,8 +106,8 @@ function onclickHouse(thumbnail) {
                     if (mutation.target.className === "detail-page details-page-container react active-view" &&
                         mutation.target.nodeName === "DIV" &&
                         mutation.target.id === "details-page-container") {
-
-                        createDetailHideButton(thumbnail);
+                        console.log("Hit detail page mutation code");
+                        createDetailHideButton(houseId, thumbnail);
                         detailObserver.disconnect();
                     }
                 }
@@ -118,7 +118,7 @@ function onclickHouse(thumbnail) {
     detailObserver.observe(target, config);
 }
 
-function createDetailHideButton(thumbnail) {
+function createDetailHideButton(houseId, thumbnail) {
     var ul = document.querySelector("ul.hdp__sc-1tf5ijk-9.fbBaJs");
 
     var li = document.createElement("li");
@@ -128,8 +128,7 @@ function createDetailHideButton(thumbnail) {
     button.setAttribute("aria-pressed", "false");
     button.setAttribute("class", "sc-AxhCb eSwYtm hdp__sc-1tf5ijk-22 iMJDnd");
     button.onclick = () => {
-        removeHouseFromDOM(thumbnail);
-        updateHiddenCount(true);
+        onClick(houseId, thumbnail)();
         document.querySelector("button.ds-close-lightbox-icon.hc-back-to-list").click();
     };
     li.appendChild(button);
