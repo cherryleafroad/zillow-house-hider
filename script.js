@@ -107,7 +107,6 @@ function onclickHouse(thumbnail) {
                         mutation.target.nodeName === "DIV" &&
                         mutation.target.id === "details-page-container") {
 
-                        console.log(mutation);
                         createDetailHideButton(thumbnail);
                         detailObserver.disconnect();
                     }
@@ -121,7 +120,6 @@ function onclickHouse(thumbnail) {
 
 function createDetailHideButton(thumbnail) {
     var ul = document.querySelector("ul.hdp__sc-1tf5ijk-9.fbBaJs");
-    console.log(ul);
 
     var li = document.createElement("li");
     li.setAttribute("class", "hdp__sc-1tf5ijk-3 eLjfA");
