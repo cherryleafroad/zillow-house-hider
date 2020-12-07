@@ -19,8 +19,11 @@ function app() {
 
   thumbnails.forEach(thumbnail => {
     // it's an ad, skip it
-    if (thumbnail.lastChild.id === "nav-ad-container")
+    if (thumbnail.lastChild.id === "nav-ad-container") {
+        // also hide it
+        thumbnail.setAttribute("style", "display:none;");
         return;
+    }
 
     const houseId = thumbnail.lastChild.id;
 
@@ -50,10 +53,28 @@ function app() {
       clearButton = document.createElement("a");
       clearButton.setAttribute("id", "clearButtonA");
       clearButton.appendChild(document.createTextNode("Clear Hidden Results"));
-      clearButton.onclick = () => { chrome.storage.sync.clear(); updateHiddenCount(); }
+      clearButton.onclick = () => { unhideHouses(); }
       header.appendChild(clearButton);
       updateHiddenCount();
   }
+}
+
+function unhideHouses() {
+    chrome.storage.sync.clear();
+    updateHiddenCount();
+    
+  const thumbnails = document.querySelectorAll("ul.photo-cards > li");
+
+  thumbnails.forEach(thumbnail => {
+    // it's an ad, skip it
+    if (thumbnail.lastChild.id === "nav-ad-container")
+        return;
+
+    // unhide it
+    if (thumbnail.style.display === "none") {
+        thumbnail.removeAttribute("style");
+    }
+  });
 }
 
 /*
