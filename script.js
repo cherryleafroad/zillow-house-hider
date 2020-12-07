@@ -1,7 +1,7 @@
-// if this passes, we are on a list that we can process
-let t = document.querySelectorAll("ul.photo-cards > li").length;
+// checks if there's a map on the page. if so, we're looking for houses
+let t = document.querySelectorAll("div#search-page-map-container");
 
-if (t > 0) {
+if (t !== null) {
     // initial load
     app();
 
