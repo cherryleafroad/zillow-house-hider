@@ -1,5 +1,5 @@
 // checks if there's a map on the page. if so, we're looking for houses
-let t = document.querySelector("div#search-page-map-container");
+let t = document.querySelectorAll("div#search-page-map-container");
 
 if (t !== null) {
     // initial load
@@ -59,6 +59,8 @@ function app() {
       // add hide button
       thumbnail.lastChild.appendChild(createHideButton(houseId, thumbnail));
     }
+    
+    thumbnail.lastChild.onclick = () => {  onclickHouse(thumbnail); }
   });
   
   // add a clear hidden results link
@@ -90,6 +92,61 @@ function unhideHouses() {
         thumbnail.removeAttribute("style");
     }
   });
+}
+
+function onclickHouse(thumbnail) {
+    var target = document.querySelector("div#home-detail-lightbox-container");
+
+    // do processing after the list finishes loading
+    var detailObserver = new MutationObserver(mutations => {
+            for (v = 0; v < mutations.length; v++) {
+                var mutation = mutations[v];
+
+                if  (mutation.removedNodes.length > 0) {
+                    if (mutation.target.className === "detail-page details-page-container react active-view" &&
+                        mutation.target.nodeName === "DIV" &&
+                        mutation.target.id === "details-page-container") {
+
+                        console.log(mutation);
+                        createDetailHideButton(thumbnail);
+                        detailObserver.disconnect();
+                    }
+                }
+            }
+    });
+    
+    var config = { childList: true, subtree: true };
+    detailObserver.observe(target, config);
+}
+
+function createDetailHideButton(thumbnail) {
+    var ul = document.querySelector("ul.hdp__sc-1tf5ijk-9.fbBaJs");
+    console.log(ul);
+
+    var li = document.createElement("li");
+    li.setAttribute("class", "hdp__sc-1tf5ijk-3 eLjfA");
+
+    var button = document.createElement("button");
+    button.setAttribute("aria-pressed", "false");
+    button.setAttribute("class", "sc-AxhCb eSwYtm hdp__sc-1tf5ijk-22 iMJDnd");
+    button.onclick = () => {
+        removeHouseFromDOM(thumbnail);
+        updateHiddenCount(true);
+        document.querySelector("button.ds-close-lightbox-icon.hc-back-to-list").click();
+    };
+    li.appendChild(button);
+
+    var div = document.createElement("div");
+    div.setAttribute("class", "hdp__sc-1tf5ijk-6 giBdlJ");
+    button.appendChild(div);
+
+    var div2 = document.createElement("div");
+    div2.setAttribute("area-hidden", "true");
+    div2.setAttribute("class", "hdp__sc-1tf5ijk-4 hdp__sc-1tf5ijk-15 hDhSkZ");
+    div2.appendChild(document.createTextNode("❌"));
+    div.appendChild(div2);
+
+    ul.prepend(li);
 }
 
 /*
