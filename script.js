@@ -1,13 +1,18 @@
-let lastHash = "";
+// if this passes, we are on a list that we can process
+let t = document.querySelectorAll("ul.photo-cards > li").length;
 
-window.setInterval(function() {
-  let newHash = location.href;
-  // trigger dom update when new url (url changes based on lat/long)
-  if (newHash !== lastHash) {
+if (t > 0) {
+    // initial load
     app();
-    lastHash = newHash;
-  }
-}, 2000);
+    
+    // only update when the list changes
+    var observer = new MutationObserver(mutations => {
+        app();
+    });
+    
+    var config = { childList: true };
+    observer.observe(document.querySelector("ul.photo-cards"), config);
+}
 
 function app() {
   const thumbnails = document.querySelectorAll("ul.photo-cards > li");
@@ -21,8 +26,8 @@ function app() {
 
     // remove all hidden houses from DOM
     storageGet(houseIdObj => {
-      console.log(Object.keys(houseIdObj));
       if (Object.keys(houseIdObj).includes(houseId)) {
+        console.log("Hid houseId " + houseId);
         removeHouseFromDOM(thumbnail);
       }
     });
@@ -111,7 +116,6 @@ function storageGet(callback) {
         return;
     }
 
-    console.log(result);
     callback(result.zillowHouseHide);
   });
 }
