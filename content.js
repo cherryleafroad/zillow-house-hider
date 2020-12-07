@@ -1,7 +1,9 @@
 // checks if there's a map on the page. if so, we're looking for houses
 let t = document.querySelector("div#search-page-map-container");
+extensionLoaded = false;
 
 if (t !== null) {
+    extensionLoaded = true;
     // initial load
     app();
 
@@ -165,6 +167,14 @@ function onClick(houseId, thumbnailDOM) {
   removeHouseFromDOM(thumbnailDOM);
   updateHiddenCount(true);
 }
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (extensionLoaded && request.message === "unhideHouses") {
+            unhideHouses();
+        }
+    }
+);
 
 /*
   Fetch data from chrome storage
