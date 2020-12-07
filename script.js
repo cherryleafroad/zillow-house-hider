@@ -61,8 +61,12 @@ function app() {
   remove the entire thumbnail for that given house
 */
 function removeHouseFromDOM(thumbnailDOM) {
-  const houseList = thumbnailDOM.parentNode;
-  houseList.removeChild(thumbnailDOM);
+    // turns out removing from DOM causes sidebar to disappear
+    //const houseList = thumbnailDOM.parentNode;
+    //houseList.removeChild(thumbnailDOM);
+    
+    // but we can hide it instead
+    thumbnailDOM.setAttribute("style", "display:none;");
 }
 
 function updateHiddenCount(increase = false) {
