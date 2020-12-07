@@ -5,15 +5,14 @@
   "description": "Hide houses on zillow.",
 
   "browser_action": {
-    "default_popup": "popup.html",
+    "default_popup": "popup/popup.html",
     "default_title": "Zillow House Hider"
   },
 
   "content_scripts": [
     {
-      "css": ["styles.css"],
-      "js": ["script.js"],
-      "matches": ["https://www.zillow.com/*"]
+      "matches": ["https://www.zillow.com/*"],
+      "js": ["thirdParty/arrive.min.js", "script.js"]
     }
   ],
 

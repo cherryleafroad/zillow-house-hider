@@ -5,28 +5,9 @@ if (t !== null) {
     // initial load
     app();
 
-    var target = document.querySelector("div#grid-search-results");
-
-    // do processing after the list finishes loading
-    var gridObserver = new MutationObserver(mutations => {
-            for (v = 0; v < mutations.length; v++) {
-                var mutation = mutations[v];
-                // check if this mutation is the last loaded node and initiate app
-                if (mutation.removedNodes.length > 0) {
-                    for (i = 0; i < mutation.removedNodes.length; i++) {
-                        if (mutation.removedNodes[i].className === "list-loading-message-cover" &&
-                            mutation.removedNodes[i].nodeName === "DIV") {
-
-                            // page finished load, so do processing now
-                            app();
-                        }
-                    }
-                }
-            }
+    document.querySelector("div#grid-search-results").leave("div.list-loading-message-cover", () => {
+        app();
     });
-    
-    var config = { childList: true };
-    gridObserver.observe(target, config);
 }
 
 function app() {
@@ -97,25 +78,9 @@ function unhideHouses() {
 function onClickHouse(houseId, thumbnail) {
     var target = document.querySelector("div#home-detail-lightbox-container");
 
-    // do processing after the list finishes loading
-    var detailObserver = new MutationObserver(mutations => {
-            for (v = 0; v < mutations.length; v++) {
-                var mutation = mutations[v];
-
-                if  (mutation.removedNodes.length > 0) {
-                    if (mutation.target.className === "detail-page details-page-container react active-view" &&
-                        mutation.target.nodeName === "DIV" &&
-                        mutation.target.id === "details-page-container") {
-
-                        createDetailHideButton(houseId, thumbnail);
-                        detailObserver.disconnect();
-                    }
-                }
-            }
+    target.arrive("button.sc-AxhCb.eSwYtm.hdp__sc-1tf5ijk-22.iMJDnd", { onceOnly: true }, () => {
+        createDetailHideButton(houseId, thumbnail);
     });
-    
-    var config = { childList: true, subtree: true };
-    detailObserver.observe(target, config);
 }
 
 function createDetailHideButton(houseId, thumbnail) {
