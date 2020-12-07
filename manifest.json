@@ -12,7 +12,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.zillow.com/*"],
-      "js": ["thirdParty/arrive.min.js", "script.js"]
+      "js": ["thirdParty/arrive.min.js", "content.js"]
     }
   ],
 
