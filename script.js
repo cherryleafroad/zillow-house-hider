@@ -4,14 +4,29 @@ let t = document.querySelectorAll("ul.photo-cards > li").length;
 if (t > 0) {
     // initial load
     app();
-    
-    // only update when the list changes
-    var observer = new MutationObserver(mutations => {
-        app();
+
+    var target = document.querySelector("div#grid-search-results");
+
+    // do processing after the list finishes loading
+    var gridObserver = new MutationObserver(mutations => {
+            for (v = 0; v < mutations.length; v++) {
+                var mutation = mutations[v];
+                // check if this mutation is the last loaded node and initiate app
+                if (mutation.removedNodes.length > 0) {
+                    for (i = 0; i < mutation.removedNodes.length; i++) {
+                        if (mutation.removedNodes[i].className === "list-loading-message-cover" &&
+                            mutation.removedNodes[i].nodeName === "DIV") {
+
+                            // page finished load, so do processing now
+                            app();
+                        }
+                    }
+                }
+            }
     });
     
     var config = { childList: true };
-    observer.observe(document.querySelector("ul.photo-cards"), config);
+    gridObserver.observe(target, config);
 }
 
 function app() {
