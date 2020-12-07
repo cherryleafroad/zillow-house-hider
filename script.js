@@ -106,7 +106,7 @@ function onClickHouse(houseId, thumbnail) {
                     if (mutation.target.className === "detail-page details-page-container react active-view" &&
                         mutation.target.nodeName === "DIV" &&
                         mutation.target.id === "details-page-container") {
-                        console.log("Hit detail page mutation code");
+
                         createDetailHideButton(houseId, thumbnail);
                         detailObserver.disconnect();
                     }
@@ -128,7 +128,7 @@ function createDetailHideButton(houseId, thumbnail) {
     button.setAttribute("aria-pressed", "false");
     button.setAttribute("class", "sc-AxhCb eSwYtm hdp__sc-1tf5ijk-22 iMJDnd");
     button.onclick = () => {
-        onClick(houseId, thumbnail)();
+        onClick(houseId, thumbnail);
         document.querySelector("button.ds-close-lightbox-icon.hc-back-to-list").click();
     };
     li.appendChild(button);
@@ -186,17 +186,19 @@ function createHideButton(houseId, thumbnailDOM) {
   
   link = document.createElement("a");
   link.appendChild(document.createTextNode("❌"));
-  link.onclick = onClick(houseId, thumbnailDOM);
+  link.onclick = (e) => {
+        // don't double click element underneath
+        e.stopPropagation();
+        onClick(houseId, thumbnailDOM);
+  };
   span.appendChild(link);
   return hideButton;
 }
 
 function onClick(houseId, thumbnailDOM) {
-  return function(e) {
-    storageSet(houseId, true);
-    removeHouseFromDOM(thumbnailDOM);
-    updateHiddenCount(true);
-  };
+  storageSet(houseId, true);
+  removeHouseFromDOM(thumbnailDOM);
+  updateHiddenCount(true);
 }
 
 /*
