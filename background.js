@@ -16,5 +16,5 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
 function setBadge(badgeText) {
     chrome.browserAction.setBadgeText({text: badgeText.toString()});
-    chrome.browserAction.setBadgeBackgroundColor({color: "#808080"});
+    chrome.browserAction.setBadgeBackgroundColor({color: "#696969"});
 }
