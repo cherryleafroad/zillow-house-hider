@@ -8,6 +8,11 @@
     "default_popup": "popup/popup.html",
     "default_title": "Zillow House Hider"
   },
+  
+  "background": {
+    "persistent": false,
+    "scripts": ["background.js"]
+  },
 
   "content_scripts": [
     {

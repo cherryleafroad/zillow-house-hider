@@ -133,6 +133,9 @@ function updateHiddenCount(increase = false) {
         if (increase)
             count++;
 
+        // update badge
+        chrome.runtime.sendMessage({ numHiddenHouses: count });
+
         elem = document.getElementsByClassName("search-page-list-header")[0].children.clearButtonA;
         elem.textContent = "Clear Hidden Results (" + count + ")";
     });
