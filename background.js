@@ -15,6 +15,11 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 });
 
 function setBadge(badgeText) {
+    if (badgeText.toString() === "0") {
+        // clear badge
+        badgeText = '';
+    }
+
     chrome.browserAction.setBadgeText({text: badgeText.toString()});
     chrome.browserAction.setBadgeBackgroundColor({color: "#696969"});
 }
